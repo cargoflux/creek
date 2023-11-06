@@ -159,7 +159,8 @@ module Creek
     def converter_options
       @converter_options ||= {
         shared_strings: @book.shared_strings.dictionary,
-        base_date: @book.base_date
+        base_date: @book.base_date,
+        default_time_zone: @book.default_time_zone
       }
     end
 

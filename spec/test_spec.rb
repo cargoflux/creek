@@ -32,8 +32,8 @@ describe 'Creek parsing dates on a sample XLSX file' do
 
     @expected_datetime_rows = [
       {'A3' => 'Date',              'B3' => Date.parse('2018-01-01')},
-      {'A4' => 'Datetime 00:00:00', 'B4' => Time.parse('2018-01-01 00:00:00')},
-      {'A5' => 'Datetime',          'B5' => Time.parse('2018-01-01 23:59:59')}]
+      {'A4' => 'Datetime 00:00:00', 'B4' => Time.parse('2018-01-01 00:00:00 +0000')},
+      {'A5' => 'Datetime',          'B5' => Time.parse('2018-01-01 23:59:59 +0000')}]
   end
 
   after(:all) do

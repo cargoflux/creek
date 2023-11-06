@@ -80,7 +80,7 @@ module Creek
           convert_unknown(value)
         end
       end
-      
+
       def self.convert_unknown(value)
         begin
           if value.nil? or value.empty?
@@ -106,8 +106,9 @@ module Creek
 
       def self.convert_datetime(value, options)
         date = base_date(options) + value.to_f.round(6)
+        zone = base_time_zone(options)
 
-        round_datetime(date.strftime('%Y-%m-%d %H:%M:%S.%N'))
+        round_datetime(date.strftime('%Y-%m-%d %H:%M:%S.%N'), zone)
       end
 
       def self.convert_bignum(value)
@@ -130,10 +131,22 @@ module Creek
           options.fetch(:base_date, Date.new(1899, 12, 30))
         end
 
-        def self.round_datetime(datetime_string)
+      # Base time zone as specified in options[:default_time_cone]
+      # Will default to UTC (+00:00 TZ offset) if not specified
+      # Supported formats: "+HH:MM", "-HH:MM", "UTC" or "A".."I","K".."Z"
+      def self.base_time_zone(options)
+        options[:default_time_zone]
+      end
+
+      # `time_zone` in an integer time zone offset to use when converting/rounding time
+      def self.round_datetime(datetime_string, time_zone)
           /(?<yyyy>\d+)-(?<mm>\d+)-(?<dd>\d+) (?<hh>\d+):(?<mi>\d+):(?<ss>\d+.\d+)/ =~ datetime_string
 
-          ::Time.new(yyyy.to_i, mm.to_i, dd.to_i, hh.to_i, mi.to_i, ss.to_r).round(0)
+          if time_zone
+            ::Time.new(yyyy.to_i, mm.to_i, dd.to_i, hh.to_i, mi.to_i, ss.to_r, time_zone).round(0)
+          else
+            ::Time.new(yyyy.to_i, mm.to_i, dd.to_i, hh.to_i, mi.to_i, ss.to_r).round(0)
+          end
         end
     end
   end

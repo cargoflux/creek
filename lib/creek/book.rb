@@ -9,7 +9,8 @@ module Creek
   class Creek::Book
     attr_reader :files,
                 :shared_strings,
-                :with_headers
+                :with_headers,
+                :default_time_zone
 
     DATE_1900 = Date.new(1899, 12, 30).freeze
     DATE_1904 = Date.new(1904, 1, 1).freeze
@@ -24,6 +25,7 @@ module Creek
       @files = Zip::File.open(path)
       @shared_strings = SharedStrings.new(self)
       @with_headers = options.fetch(:with_headers, false)
+      @default_time_zone = options.fetch(:default_time_zone, '+00:00')
     end
 
     def sheets
